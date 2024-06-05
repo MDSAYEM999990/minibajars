@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, Button, Alert, ActivityIndicator } from 'react-native';
+import {  Text, FlatList,  StyleSheet, ActivityIndicator } from 'react-native';
 import axios from 'axios';
+import ProductFlatList from './components/ProductFlatList';
 import { renderItem } from './components/renderItem'
 import { handleLoadMore } from './components/handleMore';
 
@@ -34,26 +35,16 @@ const ProductList = () => {
     }
 
     return (
-        <FlatList
-            data={displayedProducts}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => item.id.toString() + index.toString()}
-            numColumns={2}
-            columnWrapperStyle={styles.row}
-            onEndReached={handleLoadMore}
-            onEndReachedThreshold={0.5}
-            ListFooterComponent={loadingMore && displayedProducts.length % 10 === 0 ? <ActivityIndicator size="large" color="#0000ff" /> : null}
-        />
+        <ProductFlatList
+        displayedProducts={displayedProducts}
+        setDisplayedProducts={setDisplayedProducts}
+        setLoadingMore={setLoadingMore}
+        setPage={setPage}
+        page={page}
+        pageSize={pageSize}
+        loadingMore={loadingMore}
+    />
     );
 };
-
-const styles = StyleSheet.create({
-    row: {
-        flex: 1,
-        justifyContent: 'space-between',
-        marginBottom: 1,
-    },
-   
-});
 
 export default ProductList;
