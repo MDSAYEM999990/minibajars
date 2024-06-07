@@ -1,7 +1,5 @@
-// handleCart.js
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
-
 
 export const handleAddToCart = async (product) => {
     try {
@@ -13,11 +11,12 @@ export const handleAddToCart = async (product) => {
             Alert.alert('Product already in cart');
             return;
         }
+
         cart.push(product);
         await AsyncStorage.setItem('cart', JSON.stringify(cart));
         Alert.alert('Product added to cart');
     } catch (error) {
         console.error('Error adding product to cart:', error);
         Alert.alert('Error adding product to cart');
-    }     
+    }
 };

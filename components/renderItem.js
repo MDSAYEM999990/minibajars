@@ -1,17 +1,21 @@
 import React from 'react';
-import { View, Text, Image, Button, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { handleAddToCart } from './handleCart';
 
-
-export const renderItem = ({ item }) => (
+export const renderItem = ({ item, updateCartCount }) => (
     <View style={styles.item}>
         <Image
             style={styles.image}
             source={{ uri: item.image }}
         />
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.price}>${item.price}</Text>
-        <Button title="Add to Cart" color="red" onPress={() => handleAddToCart(item)} />
+        <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
+        <Text style={styles.price}>৳ {item.price}</Text>
+        <TouchableOpacity style={styles.button} onPress={async () => {
+            await handleAddToCart(item);
+            updateCartCount();
+        }}>
+            <Text style={styles.buttonText}>Add to Cart</Text>
+        </TouchableOpacity>
     </View>
 );
 
@@ -44,5 +48,16 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: 'green',
         marginBottom: 10,
+    },
+    button: {
+        backgroundColor: 'red',
+        padding: 10,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 12,
+        fontWeight: 'bold',
     },
 });
