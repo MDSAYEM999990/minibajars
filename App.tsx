@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Text, View } from 'react-native';
-import ProductList from './productList';
+import React from 'react';
+import AppNavigator from './components/AppNavigator';
+
 const App = () => {
-  return (
-    <View>
-     <ProductList/>
-    </View>
-  );
+    return <AppNavigator />;
 };
+
 export default App;

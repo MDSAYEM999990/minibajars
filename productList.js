@@ -4,8 +4,7 @@ import axios from 'axios';
 import { Badge } from 'react-native-elements';
 import ProductFlatList from './components/ProductFlatList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
+import { useNavigation } from '@react-navigation/native';
 
 const ProductList = () => {
     const [displayedProducts, setDisplayedProducts] = useState([]);
@@ -15,6 +14,8 @@ const ProductList = () => {
     const [page, setPage] = useState(1);
     const [cartCount, setCartCount] = useState(0);
     const pageSize = 10;
+
+const navigation = useNavigation();
 
     useEffect(() => {
         axios.get('https://fakestoreapi.com/products')
@@ -65,7 +66,7 @@ const ProductList = () => {
         <TouchableOpacity style={styles.cartButton} onPress={() => alert('Search pressed!')}>
                 <Image source={require('./assets/search-icon.png')} style={{ width: 30, height: 35, marginRight: 2 }} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.cartButton} onPress={() => alert('Cart pressed!')}>
+            <TouchableOpacity style={styles.cartButton} onPress={() =>navigation.navigate('Cart')}>
                 <Image source={require('./assets/cart-icon.png')} style={{ width: 30, height: 35, marginLeft: 10 }} />
                 {cartCount > 0 && (
                     <Badge

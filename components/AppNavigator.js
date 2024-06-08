@@ -1,12 +1,12 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import ProductList from './ProductList';
-import CartScreen from './CartScreen';
+import ProductList from '../productList';
+import CartScreen from '../screen/cart';
 
 const Stack = createStackNavigator();
 
-const AppNavigator = () => {
+const App = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator>
@@ -25,4 +25,4 @@ const AppNavigator = () => {
     );
 };
 
-export default AppNavigator;
+export default App;
