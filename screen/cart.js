@@ -25,7 +25,7 @@ const CartScreen = () => {
         navigation.setOptions({
             headerRight: () => (            
                 <TouchableOpacity onPress={handleDeleteAll} style={styles.headerButton}>
-                       <Image source={require('../assets/delete.png')} style={styles.deleteImage} />
+                    <Image source={require('../assets/delete.png')} style={styles.deleteImage} />
                 </TouchableOpacity>
             ),
         });
@@ -169,11 +169,13 @@ const CartScreen = () => {
                 renderItem={renderCartItem}
             />
             <View style={styles.totalContainer}>
-                <Text style={styles.totalPrice}>সর্বমোট : ৳{totalPrice}</Text>
-                <Text style={styles.deliveryCharge}>ডেলিভারি চার্জ : ৳{deliveryCharge}</Text>
-                <Text style={styles.finalTotal}>মোট : ৳{totalPrice + deliveryCharge}</Text>
+                <View style={styles.priceDetails}>
+                    <Text style={styles.totalPrice}>মোট : ৳{totalPrice}</Text>
+                    <Text style={styles.deliveryCharge}>ডেলিভারি চার্জ : ৳{deliveryCharge}</Text>
+                    <Text style={styles.finalTotal}>সর্বমোট: ৳{totalPrice + deliveryCharge}</Text>
+                </View>
                 <TouchableOpacity onPress={handleConfirmOrder} style={styles.confirmButton}>
-                    <Text style={styles.confirmButtonText}> Order Now</Text>
+                    <Text style={styles.confirmButtonText}>Order Now</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -243,16 +245,23 @@ const styles = StyleSheet.create({
         height: 25,
     },
     totalContainer: {
-        flexDirection: 'column',
-        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 20,
         paddingHorizontal: 16,
+        paddingVertical: 10,
+        borderTopWidth: 1,
+        borderColor: '#ccc',
+    },
+    priceDetails: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
     },
     totalPrice: {
         fontSize: 16,
         fontWeight: 'bold',
-        color:'black',
+        color: 'black',
     },
     deliveryCharge: {
         fontSize: 16,
@@ -262,16 +271,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: 'black',
+        marginTop: 5,
     },
     headerButton: {
         marginRight: 20,
     },
     confirmButton: {
         backgroundColor: 'red',
-        padding: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
         borderRadius: 10,
         alignItems: 'center',
-        marginTop: 10,
     },
     confirmButtonText: {
         fontSize: 14,
