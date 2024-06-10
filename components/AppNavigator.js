@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ProductList from '../productList';
 import CartScreen from '../screen/cart';
+//import SearchScreen from
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ const App = () => {
                     component={CartScreen}
                     options={{ title: 'Cart' }}
                 />
+
             </Stack.Navigator>
         </NavigationContainer>
     );

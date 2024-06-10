@@ -6,15 +6,17 @@ export const handleAddToCart = async (product) => {
         const storedCart = await AsyncStorage.getItem('cart');
         const cart = storedCart ? JSON.parse(storedCart) : [];
         
-        const productExists = cart.some(item => item.id === product.id);
-        if (productExists) {
-            Alert.alert('Product already in cart');
-            return;
+        const productIndex = cart.findIndex(item => item.id === product.id);
+        if (productIndex !== -1) {
+            cart[productIndex].quantity += 1;
+            Alert.alert('Product quantity increased');
+        } else {
+            product.quantity = 1; // Add default quantity
+            cart.push(product);
+            Alert.alert('Product added to cart');
         }
 
-        cart.push(product);
         await AsyncStorage.setItem('cart', JSON.stringify(cart));
-        Alert.alert('Product added to cart');
     } catch (error) {
         console.error('Error adding product to cart:', error);
         Alert.alert('Error adding product to cart');
