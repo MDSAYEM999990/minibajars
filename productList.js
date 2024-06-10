@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Badge } from 'react-native-elements';
 import ProductFlatList from './components/ProductFlatList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 
 const ProductList = () => {
     const [displayedProducts, setDisplayedProducts] = useState([]);
@@ -16,39 +16,42 @@ const ProductList = () => {
     const pageSize = 10;
 
     const navigation = useNavigation();
+    const isFocused = useIsFocused();
 
     useEffect(() => {
-        axios.get('https://fakestoreapi.com/products')
-            .then(response => {
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get('https://fakestoreapi.com/products');
                 setDisplayedProducts(response.data.slice(0, pageSize));
                 setLoading(false);
-            })
-            .catch(error => {
+            } catch (error) {
                 setError('Error fetching products');
                 setLoading(false);
-            });
-
-        const fetchCartCount = async () => {
-            try {
-                const storedCart = await AsyncStorage.getItem('cart');
-                const cart = storedCart ? JSON.parse(storedCart) : [];
-                setCartCount(cart.length);
-            } catch (error) {
-                console.error('Error fetching cart count:', error);
             }
         };
 
+        fetchProducts();
         fetchCartCount();
     }, []);
 
-    const updateCartCount = async () => {
+    useEffect(() => {
+        if (isFocused) {
+            fetchCartCount();
+        }
+    }, [isFocused]);
+
+    const fetchCartCount = async () => {
         try {
             const storedCart = await AsyncStorage.getItem('cart');
             const cart = storedCart ? JSON.parse(storedCart) : [];
             setCartCount(cart.length);
         } catch (error) {
-            console.error('Error updating cart count:', error);
+            console.error('Error fetching cart count:', error);
         }
+    };
+
+    const updateCartCount = async () => {
+        await fetchCartCount();
     };
 
     useLayoutEffect(() => {
