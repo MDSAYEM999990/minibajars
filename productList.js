@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
 import { Badge } from 'react-native-elements';
@@ -15,7 +15,7 @@ const ProductList = () => {
     const [cartCount, setCartCount] = useState(0);
     const pageSize = 10;
 
-const navigation = useNavigation();
+    const navigation = useNavigation();
 
     useEffect(() => {
         axios.get('https://fakestoreapi.com/products')
@@ -51,6 +51,28 @@ const navigation = useNavigation();
         }
     };
 
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <View style={styles.iconContainer}>
+                    <TouchableOpacity style={styles.iconButton} onPress={() => alert('Search pressed!')}>
+                        <Image source={require('./assets/search-icon.png')} style={styles.iconImage} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Cart')}>
+                        <Image source={require('./assets/cart-icon.png')} style={styles.iconImage} />
+                        {cartCount > 0 && (
+                            <Badge
+                                value={cartCount}
+                                status="error"
+                                containerStyle={styles.badgeContainer}
+                            />
+                        )}
+                    </TouchableOpacity>
+                </View>
+            ),
+        });
+    }, [navigation, cartCount]);
+
     if (loading) {
         return <ActivityIndicator size="large" color="#0000ff" />;
     }
@@ -60,52 +82,37 @@ const navigation = useNavigation();
 
     return (
         <View style={styles.container}>
-        <View style={styles.iconContainer}>
-
-        <TouchableOpacity style={styles.cartButton} onPress={() => alert('Search pressed!')}>
-                <Image source={require('./assets/search-icon.png')} style={{ width: 30, height: 35, marginRight: 2 }} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cartButton} onPress={() =>navigation.navigate('Cart')}>
-                <Image source={require('./assets/cart-icon.png')} style={{ width: 30, height: 35, marginLeft: 10 }} />
-                {cartCount > 0 && (
-                    <Badge
-                        value={cartCount}
-                        status="error"
-                        containerStyle={styles.badgeContainer}
-                    />
-                )}
-            </TouchableOpacity>
-            
+            <ProductFlatList
+                displayedProducts={displayedProducts}
+                setDisplayedProducts={setDisplayedProducts}
+                setLoadingMore={setLoadingMore}
+                setPage={setPage}
+                page={page}
+                pageSize={pageSize}
+                loadingMore={loadingMore}
+                updateCartCount={updateCartCount}
+            />
         </View>
-        <ProductFlatList
-            displayedProducts={displayedProducts}
-            setDisplayedProducts={setDisplayedProducts}
-            setLoadingMore={setLoadingMore}
-            setPage={setPage}
-            page={page}
-            pageSize={pageSize}
-            loadingMore={loadingMore}
-            updateCartCount={updateCartCount}
-        />
-    </View>
-    
-    
     );
 };
+
 const styles = StyleSheet.create({
     container: {
-       
+        flex: 1,
+        padding: 10,
     },
     iconContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        paddingVertical: 10,
         paddingHorizontal: 20,
     },
-    cartButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    iconButton: {
+        marginLeft: 15,
+    },
+    iconImage: {
+        width: 30,
+        height: 30,
     },
     badgeContainer: {
         position: 'absolute',
@@ -113,6 +120,5 @@ const styles = StyleSheet.create({
         right: -8,
     },
 });
-
 
 export default ProductList;
